@@ -1,11 +1,22 @@
-from flask import Flask, render_template
+from flask import Flask,request,jsonify
 
-app = Flask(__name__)
+main = Flask(__name__)
 
-@app.route('/')
+@main.route('/')
 def index():
-    return render_template('test.html')
+    return "Hello world"
 
+@main.route('/predict',methods=['POST'])
+def predict():
+    cgpa = request.form.get('cgpa')
+    iq = request.form.get('iq')
+    profile_score = request.form.get('profile_score')
+
+    input_query = np.array([[cgpa,iq,profile_score]])
+
+    result = {'cgpa':cgpa,'iq':iq,'profile_score':profile_score}
+
+    return jsonify(result)
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    main.run(debug=True)
